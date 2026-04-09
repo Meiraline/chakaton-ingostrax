@@ -162,7 +162,7 @@ function GamePage() {
           status: nextRound?.status || currentRound?.status,
         },
       ]);
-      setHistoryIndex(-1);
+      setHistoryIndex(history.length);
       setRound(nextRound);
       setPlayerAnswer('');
       if (nextRound?.status?.isFinish) {
@@ -185,7 +185,7 @@ function GamePage() {
     try {
       await loadRound();
       setLastResult(null);
-      setHistoryIndex(-1);
+      setHistoryIndex(history.length);
     } catch (err) {
       setError(err.message || 'Не удалось загрузить следующий раунд.');
     } finally {
@@ -202,53 +202,54 @@ function GamePage() {
     navigate('/account');
   };
 
-  const currentHistory = historyIndex >= 0 ? history[historyIndex] : null;
+  const currentStatus = round?.status || background?.status || {};
+
+  const liveEventCard = !lastResult
+    ? {
+        title: round?.event?.title || 'Событие',
+        situation:
+          round?.event?.description ||
+          round?.event?.title ||
+          'Ситуация пока отсутствует.',
+        image: round?.event?.image || '',
+        answer: '',
+        consequence: '',
+      }
+    : null;
+
+  const eventCards = liveEventCard ? [...history, liveEventCard] : history;
+  const safeEventIndex = eventCards.length
+    ? historyIndex >= 0 && historyIndex < eventCards.length
+      ? historyIndex
+      : eventCards.length - 1
+    : -1;
 
   const handleHistoryPrev = () => {
-    setHistoryIndex((index) => Math.max(0, index - 1));
+    if (safeEventIndex <= 0) {
+      return;
+    }
+
+    setHistoryIndex(safeEventIndex - 1);
   };
 
   const handleHistoryNext = () => {
-    setHistoryIndex((index) => Math.min(history.length - 1, index + 1));
-  };
-
-  const currentStatus = round?.status || background?.status || {};
-
-  // Определяем текущее событие для отображения
-  const getCurrentEvent = () => {
-    if (currentHistory) {
-      return {
-        title: currentHistory.title || 'Событие',
-        situation: currentHistory.situation || currentHistory.question,
-        image: currentHistory.image || '',
-        answer: currentHistory.answer,
-        consequence: currentHistory.consequence,
-      };
+    if (safeEventIndex >= eventCards.length - 1) {
+      return;
     }
 
-    if (lastResult) {
-      return {
-        title: lastResult.previousRound?.event?.title || 'Событие',
-        situation:
-          lastResult.previousRound?.event?.description ||
-          lastResult.previousRound?.event?.title ||
-          'Ситуация пока отсутствует.',
-        image: lastResult.previousRound?.event?.image || '',
-        answer: lastResult.answer,
-        consequence: lastResult.result?.report || JSON.stringify(lastResult.result || {}, null, 2),
-      };
-    }
-
-    return {
-      title: round?.event?.title || 'Событие',
-      situation: round?.event?.description || round?.event?.title || 'Ситуация пока отсутствует.',
-      image: round?.event?.image || '',
-      answer: '',
-      consequence: '',
-    };
+    setHistoryIndex(safeEventIndex + 1);
   };
 
-  const currentEvent = getCurrentEvent();
+  const currentEvent =
+    safeEventIndex >= 0
+      ? eventCards[safeEventIndex]
+      : {
+          title: 'Событие',
+          situation: 'Ситуация пока отсутствует.',
+          image: '',
+          answer: '',
+          consequence: '',
+        };
   const currentEventImage = resolveEventImage(currentEvent.image);
 
   useEffect(() => {
@@ -328,11 +329,17 @@ function GamePage() {
                     </div>
 
                     <div className="events-card__footer">
-                      <button className="button button--secondary button--small" onClick={handleHistoryPrev} disabled={historyIndex <= 0}>
+                      <button className="button button--secondary button--small" onClick={handleHistoryPrev} disabled={safeEventIndex <= 0}>
                         ←
                       </button>
-                      <span className="events-card__counter">{historyIndex + 1} / {Math.max(1, history.length)}</span>
-                      <button className="button button--secondary button--small" onClick={handleHistoryNext} disabled={historyIndex >= history.length - 1 || history.length === 0}>
+                      <span className="events-card__counter">
+                        {eventCards.length ? safeEventIndex + 1 : 0} / {Math.max(1, eventCards.length)}
+                      </span>
+                      <button
+                        className="button button--secondary button--small"
+                        onClick={handleHistoryNext}
+                        disabled={safeEventIndex >= eventCards.length - 1 || eventCards.length === 0}
+                      >
                         →
                       </button>
                     </div>
