@@ -5,9 +5,8 @@ import FooterSection from '../components/3_organism/FooterSection';
 import SectionTitle from '../components/1_atoms/SectionTitle';
 import { useAuth } from '../hooks/useAuth';
 import { getBackground, getRound, submitRound } from '../api/game';
+import { resolveEventCardImage } from '../utils/eventCardImages';
 import './GamePage.css';
-
-const EVENT_IMAGE_BASE_PATH = '/png_ for_cards';
 
 const statLabels = {
   health: 'Здоровье',
@@ -24,40 +23,6 @@ const statIcons = {
   annualSavings: '/icons/income.svg',
   age: '/icons/health.svg',
 };
-
-function resolveEventImage(imageName) {
-  if (typeof imageName !== 'string') {
-    return null;
-  }
-
-  const normalized = imageName.trim().replace(/\\/g, '/');
-
-  if (!normalized) {
-    return null;
-  }
-
-  if (/^https?:\/\//i.test(normalized)) {
-    return normalized;
-  }
-
-  const assetName = /\.[a-z0-9]+$/i.test(normalized)
-    ? normalized
-    : `${normalized}.png`;
-
-  if (assetName.startsWith('/')) {
-    return encodeURI(assetName);
-  }
-
-  if (
-    assetName.startsWith('png_ for_cards/') ||
-    assetName.startsWith('png/') ||
-    assetName.startsWith('icons/')
-  ) {
-    return encodeURI(`/${assetName}`);
-  }
-
-  return encodeURI(`${EVENT_IMAGE_BASE_PATH}/${assetName}`);
-}
 
 function GamePage() {
   const { sessionGameID } = useParams();
@@ -250,7 +215,7 @@ function GamePage() {
           answer: '',
           consequence: '',
         };
-  const currentEventImage = resolveEventImage(currentEvent.image);
+  const currentEventImage = resolveEventCardImage(currentEvent.image);
 
   useEffect(() => {
     setEventImageFailed(false);
