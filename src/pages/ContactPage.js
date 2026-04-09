@@ -7,7 +7,7 @@ import './ContactPage.css';
 
 function ContactPage() {
   const team = [
-    { name: 'Григорий Шкоткин', role: 'Промпт-инженер и специотст по ИИ' },
+    { name: 'Григорий Шкоткин', role: 'Промпт-инженер и специалист по ИИ' },
     { name: 'Изосимов Александр', role: 'Тимлид' },
     { name: 'Егор Скуратов', role: 'Backend-разработчик, DevOps' },
     { name: 'Мария', role: 'UX/UI дизайнер, верстальщик' },
