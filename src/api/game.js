@@ -26,7 +26,8 @@ export async function getRound(sessionGameID) {
 }
 
 export async function submitRound(sessionGameID, solving) {
-  return apiRequest(`/v1/round/${sessionGameID}?solving=${encodeURIComponent(solving)}`, {
+  return apiRequest(`/v1/round/${sessionGameID}`, {
     method: "POST",
+    body: JSON.stringify({ solving }),
   });
 }

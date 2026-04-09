@@ -1,9 +1,9 @@
 import articles from "../data/articles";
 
-export async function getArticles() {
+export function getArticles() {
   return articles;
 }
 
-export async function getArticleById(id) {
-  return articles.find(article => article.id === parseInt(id));
+export function getArticleById(id) {
+  return articles.find(article => article.id === parseInt(id, 10));
 }
