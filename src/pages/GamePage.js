@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Layout from '../components/4_unity/Layout';
-import Header from '../components/3_organism/Header';
 import FooterSection from '../components/3_organism/FooterSection';
 import SectionTitle from '../components/1_atoms/SectionTitle';
 import { useAuth } from '../hooks/useAuth';
 import { getBackground, getRound, submitRound } from '../api/game';
 import './GamePage.css';
+
+const EVENT_IMAGE_BASE_PATH = '/png_ for_cards';
 
 const statLabels = {
   health: 'Здоровье',
@@ -24,6 +25,40 @@ const statIcons = {
   age: '/icons/health.svg',
 };
 
+function resolveEventImage(imageName) {
+  if (typeof imageName !== 'string') {
+    return null;
+  }
+
+  const normalized = imageName.trim().replace(/\\/g, '/');
+
+  if (!normalized) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(normalized)) {
+    return normalized;
+  }
+
+  const assetName = /\.[a-z0-9]+$/i.test(normalized)
+    ? normalized
+    : `${normalized}.png`;
+
+  if (assetName.startsWith('/')) {
+    return encodeURI(assetName);
+  }
+
+  if (
+    assetName.startsWith('png_ for_cards/') ||
+    assetName.startsWith('png/') ||
+    assetName.startsWith('icons/')
+  ) {
+    return encodeURI(`/${assetName}`);
+  }
+
+  return encodeURI(`${EVENT_IMAGE_BASE_PATH}/${assetName}`);
+}
+
 function GamePage() {
   const { sessionGameID } = useParams();
   const location = useLocation();
@@ -40,6 +75,7 @@ function GamePage() {
   const [sendLoading, setSendLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
+  const [eventImageFailed, setEventImageFailed] = useState(false);
 
   const difficultyFromState = location.state?.difficulty || 'MEDIUM';
 
@@ -114,6 +150,12 @@ function GamePage() {
       setHistory((prev) => [
         ...prev,
         {
+          title: currentRound?.event?.title || 'Событие',
+          image: currentRound?.event?.image || '',
+          situation:
+            currentRound?.event?.description ||
+            currentRound?.event?.title ||
+            'Ситуация не найдена.',
           question: currentRound?.event?.title || currentRound?.event?.description || 'Ситуация не найдена.',
           answer: playerAnswer.trim(),
           consequence: result?.report || JSON.stringify(result, null, 2),
@@ -176,7 +218,9 @@ function GamePage() {
   const getCurrentEvent = () => {
     if (currentHistory) {
       return {
-        situation: currentHistory.question,
+        title: currentHistory.title || 'Событие',
+        situation: currentHistory.situation || currentHistory.question,
+        image: currentHistory.image || '',
         answer: currentHistory.answer,
         consequence: currentHistory.consequence,
       };
@@ -184,23 +228,32 @@ function GamePage() {
 
     if (lastResult) {
       return {
+        title: lastResult.previousRound?.event?.title || 'Событие',
         situation:
           lastResult.previousRound?.event?.description ||
           lastResult.previousRound?.event?.title ||
           'Ситуация пока отсутствует.',
+        image: lastResult.previousRound?.event?.image || '',
         answer: lastResult.answer,
         consequence: lastResult.result?.report || JSON.stringify(lastResult.result || {}, null, 2),
       };
     }
 
     return {
+      title: round?.event?.title || 'Событие',
       situation: round?.event?.description || round?.event?.title || 'Ситуация пока отсутствует.',
+      image: round?.event?.image || '',
       answer: '',
       consequence: '',
     };
   };
 
   const currentEvent = getCurrentEvent();
+  const currentEventImage = resolveEventImage(currentEvent.image);
+
+  useEffect(() => {
+    setEventImageFailed(false);
+  }, [currentEventImage]);
 
   return (
     <Layout>
@@ -235,24 +288,41 @@ function GamePage() {
                 ) : (
                   <>
                     <div className="events-card__body">
-                      <div className="event-field">
-                        <label className="event-field__label">Ситуация</label>
-                        <div className="event-field__content">
-                          {currentEvent.situation}
-                        </div>
+                      <div className="events-card__media">
+                        {currentEventImage && !eventImageFailed ? (
+                          <img
+                            src={currentEventImage}
+                            alt={currentEvent.title || 'Иллюстрация события'}
+                            className="events-card__image"
+                            onError={() => setEventImageFailed(true)}
+                          />
+                        ) : (
+                          <div className="events-card__media-placeholder">
+                            <span>{currentEvent.title || 'Иллюстрация события'}</span>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="event-field">
-                        <label className="event-field__label">Ваш ответ</label>
-                        <div className="event-field__content">
-                          {currentEvent.answer || '—'}
+                      <div className="events-card__details">
+                        <div className="event-field">
+                          <label className="event-field__label">Ситуация</label>
+                          <div className="event-field__content">
+                            {currentEvent.situation}
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="event-field">
-                        <label className="event-field__label">Последствия</label>
-                        <div className="event-field__content">
-                          {currentEvent.consequence || '—'}
+                        <div className="event-field">
+                          <label className="event-field__label">Ваш ответ</label>
+                          <div className="event-field__content">
+                            {currentEvent.answer || '—'}
+                          </div>
+                        </div>
+
+                        <div className="event-field">
+                          <label className="event-field__label">Последствия</label>
+                          <div className="event-field__content">
+                            {currentEvent.consequence || '—'}
+                          </div>
                         </div>
                       </div>
                     </div>
