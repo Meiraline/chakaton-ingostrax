@@ -13,7 +13,10 @@ export async function loginUser(data) {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams(data).toString(),
+    body: new URLSearchParams({
+      username: data.username,
+      password: data.password,
+    }).toString(),
   });
 }
 
