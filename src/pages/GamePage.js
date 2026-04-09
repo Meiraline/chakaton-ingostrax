@@ -204,11 +204,10 @@ function GamePage() {
 
   return (
     <Layout>
-      <Header />
       <main className="game-page">
         <section className="game-hero">
           <div className="game-hero__top">
-            <SectionTitle title="Игровая сессия" subtitle={`Персонаж: ${location.state?.fullName || ''}`} />
+            <SectionTitle title={`Персонаж: ${location.state?.fullName || ''}`} />
             <div className="game-hero__actions">
               <button className="button button--secondary" onClick={handleBackToAccount}>
                 Назад
