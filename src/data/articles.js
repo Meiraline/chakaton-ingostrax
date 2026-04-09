@@ -1,3 +1,5 @@
+import extraArticles from './extraArticles';
+
 const articles = [
   {
     id: 1,
@@ -180,4 +182,6 @@ const articles = [
   }
 ];
 
-export default articles;
+const allArticles = [...articles, ...extraArticles];
+
+export default allArticles;

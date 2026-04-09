@@ -6,7 +6,7 @@
   align-items: center;
   padding: 46px 40px 52px;
   color: #ffffff;
-  background: url('../../assets/technical/подвал.svg') no-repeat center / cover,
+  background: 
     linear-gradient(135deg, #63aad7 0%, #4b91c0 100%);
   border-radius: 28px;
 }
@@ -26,7 +26,7 @@
 .site-footer__brand p {
   margin: 0;
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.0;
 }
 
 .site-footer__links {
@@ -41,7 +41,7 @@
 }
 
 .site-footer__column h4 {
-  margin: 0 0 6px;
+  margin: 0 0 2px;
   font-size: 1.5rem;
   font-weight: 800;
 }

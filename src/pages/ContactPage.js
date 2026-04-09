@@ -7,10 +7,10 @@ import './ContactPage.css';
 
 function ContactPage() {
   const team = [
-    { name: 'Гриша', role: 'Frontend-разработчик' },
-    { name: 'Александр', role: 'Тимлид' },
-    { name: 'Егор', role: 'Backend-разработчик' },
-    { name: 'Мария', role: 'UX/UI дизайнер' },
+    { name: 'Григорий Шкоткин', role: 'Промпт-инженер и специотст по ИИ' },
+    { name: 'Изосимов Александр', role: 'Тимлид' },
+    { name: 'Егор Скуратов', role: 'Backend-разработчик, DevOps' },
+    { name: 'Мария', role: 'UX/UI дизайнер, верстальщик' },
   ];
 
   return (

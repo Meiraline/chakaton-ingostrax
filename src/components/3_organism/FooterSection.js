@@ -15,6 +15,7 @@ function FooterSection() {
           <h4>Страницы</h4>
           <Link to="/">Главная</Link>
           <Link to="/blog">Блог</Link>
+          <Link to="/contacts">Контакты</Link>
           <Link to="/login">Вход</Link>
           <Link to="/register">Регистрация</Link>
         </div>

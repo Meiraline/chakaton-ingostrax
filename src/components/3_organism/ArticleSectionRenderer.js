@@ -26,16 +26,19 @@ function renderTextBlocks(content) {
 }
 
 function ArticleSectionRenderer({ section }) {
+  const textValue = section.value || section.content;
+  const sectionItems = section.items || section.steps;
+
   switch (section.type) {
     case 'text':
-      return <div className="article-section article-rich-text">{renderTextBlocks(section.content)}</div>;
+      return <div className="article-section article-rich-text">{renderTextBlocks(textValue)}</div>;
 
     case 'steps':
       return (
         <section className="article-section article-panel">
-          <h2>{section.title}</h2>
+          {section.title ? <h2>{section.title}</h2> : null}
           <ol className="article-steps">
-            {section.steps.map((step) => (
+            {sectionItems.map((step) => (
               <li key={step}>{step}</li>
             ))}
           </ol>
@@ -45,8 +48,23 @@ function ArticleSectionRenderer({ section }) {
     case 'analogy':
       return (
         <section className="article-section article-panel article-panel--accent">
-          <h2>{section.title}</h2>
-          <div className="article-rich-text">{renderTextBlocks(section.content)}</div>
+          {section.title ? <h2>{section.title}</h2> : null}
+          <div className="article-rich-text">{renderTextBlocks(textValue)}</div>
+        </section>
+      );
+
+    case 'highlight':
+      return (
+        <section className="article-section article-panel article-panel--accent">
+          <div className="article-rich-text">{renderTextBlocks(textValue)}</div>
+        </section>
+      );
+
+    case 'example':
+      return (
+        <section className="article-section article-panel">
+          <h2>{section.title || 'Пример'}</h2>
+          <div className="article-rich-text">{renderTextBlocks(textValue)}</div>
         </section>
       );
 
@@ -80,7 +98,7 @@ function ArticleSectionRenderer({ section }) {
     case 'list':
       return (
         <section className="article-section article-panel">
-          <h2>{section.title}</h2>
+          {section.title ? <h2>{section.title}</h2> : null}
           <ul className="article-checklist">
             {section.items.map((item) => (
               <li key={item}>{item}</li>
