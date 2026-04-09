@@ -427,7 +427,7 @@ function GamePage() {
             <div className="finished-modal">
               <div className="finished-modal__panel">
                 <h3>Игра окончена</h3>
-                <p>{round?.event?.description || round?.event?.title || 'Последний ход завершён.'}</p>
+                <p>Спасибо за игру! Вы можете вернуться в главное меню или выйти из аккаунта.</p>
                 <button className="button button--primary" onClick={handleBackToAccount}>
                   Назад в главное меню
                 </button>
