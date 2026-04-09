@@ -1,0 +1,155 @@
+.article-section {
+  display: grid;
+  gap: 18px;
+}
+
+.article-rich-text {
+  display: grid;
+  gap: 14px;
+}
+
+.article-rich-text__heading {
+  margin: 8px 0 0;
+  color: #1d5c8e;
+  font-size: 1.45rem;
+}
+
+.article-rich-text__paragraph {
+  margin: 0;
+  color: #335d84;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.article-panel {
+  padding: 28px;
+  background: #ffffff;
+  border: 2px solid rgba(103, 169, 211, 0.35);
+  border-radius: 24px;
+  box-shadow: 0 14px 34px rgba(37, 89, 141, 0.08);
+}
+
+.article-panel--accent {
+  background: linear-gradient(180deg, #f5fbff 0%, #eef7ff 100%);
+}
+
+.article-panel h2,
+.article-info-card h2,
+.article-scenario h2 {
+  margin: 0;
+  color: #1f5f8f;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+
+.article-steps,
+.article-checklist {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding-left: 22px;
+  color: #335d84;
+  line-height: 1.65;
+}
+
+.article-table-wrap {
+  overflow-x: auto;
+}
+
+.article-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.article-table th,
+.article-table td {
+  padding: 16px 18px;
+  text-align: left;
+  border-bottom: 1px solid rgba(103, 169, 211, 0.26);
+}
+
+.article-table th {
+  background: #69add8;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.article-table td {
+  background: #ffffff;
+  color: #335d84;
+}
+
+.article-info-card,
+.article-scenario {
+  padding: 28px;
+  background: #ffffff;
+  border: 2px solid #67a9d3;
+  border-radius: 24px;
+  box-shadow: 0 14px 34px rgba(37, 89, 141, 0.08);
+}
+
+.article-info-card__title,
+.article-scenario__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.article-info-card__title span,
+.article-scenario__title span {
+  font-size: 1.8rem;
+}
+
+.article-info-card p {
+  margin: 0;
+  color: #335d84;
+  line-height: 1.7;
+}
+
+.article-scenario__grid {
+  display: grid;
+  gap: 16px;
+}
+
+.article-scenario__card {
+  padding: 20px;
+  border-radius: 18px;
+  background: #f8fbff;
+  border: 1px solid rgba(103, 169, 211, 0.3);
+}
+
+.article-scenario__card--muted {
+  background: #fff4f2;
+}
+
+.article-scenario__card--accent {
+  background: #eef9f4;
+}
+
+.article-scenario__card h3 {
+  margin: 0 0 10px;
+  color: #1f5f8f;
+  font-size: 1.05rem;
+}
+
+.article-scenario__card p {
+  margin: 0;
+  color: #335d84;
+  line-height: 1.65;
+}
+
+@media (max-width: 760px) {
+  .article-panel,
+  .article-info-card,
+  .article-scenario {
+    padding: 20px;
+  }
+
+  .article-panel h2,
+  .article-info-card h2,
+  .article-scenario h2 {
+    font-size: 1.35rem;
+  }
+}

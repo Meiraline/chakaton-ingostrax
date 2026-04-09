@@ -10,6 +10,9 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AccountPage from './pages/AccountPage';
 import GamePage from './pages/GamePage';
+import { getArticles } from './api/blog';
+
+const articleRoutes = getArticles();
 
 function App() {
   return (
@@ -20,6 +23,13 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:id" element={<ArticlePage />} />
+            {articleRoutes.map((article) => (
+              <Route
+                key={article.slug}
+                path={article.url}
+                element={<ArticlePage articleSlug={article.slug} />}
+              />
+            ))}
             <Route path="/contacts" element={<ContactPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />

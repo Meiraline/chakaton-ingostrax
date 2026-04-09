@@ -1,3 +1,131 @@
 .blog-main {
-  padding: 40px 0;
+  padding: 28px 0 24px;
+  display: grid;
+  gap: 28px;
+}
+
+.blog-main__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 28px;
+  align-items: stretch;
+  padding: 28px 32px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  border: 2px solid rgba(103, 169, 211, 0.24);
+  border-radius: 28px;
+  box-shadow: 0 14px 34px rgba(37, 89, 141, 0.06);
+}
+
+.blog-main__intro-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.blog-main__intro-side {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding-top: 6px;
+}
+
+.blog-main__eyebrow {
+  margin: 0;
+  color: #63a8d3;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.blog-main__intro h2 {
+  margin: 0;
+  max-width: 620px;
+  color: #1f5f8f;
+  font-size: clamp(1.85rem, 3vw, 2.8rem);
+  line-height: 1.16;
+}
+
+.blog-main__lead,
+.blog-main__intro-side p {
+  margin: 0;
+  color: #456887;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.blog-main__lead {
+  max-width: 600px;
+}
+
+.blog-main__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.blog-main__stat {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid rgba(103, 169, 211, 0.26);
+  border-radius: 18px;
+}
+
+.blog-main__stat strong {
+  color: #1f5f8f;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.blog-main__stat span {
+  color: #5e7c97;
+  font-size: 0.88rem;
+}
+
+.blog-empty {
+  padding: 36px 32px;
+  text-align: center;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+  border: 2px dashed rgba(103, 169, 211, 0.35);
+  border-radius: 28px;
+}
+
+.blog-empty h3 {
+  margin: 0 0 10px;
+  color: #1f5f8f;
+  font-size: 1.45rem;
+}
+
+.blog-empty p {
+  margin: 0;
+  color: #4e6d89;
+  line-height: 1.65;
+}
+
+@media (max-width: 900px) {
+  .blog-main__intro {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .blog-main {
+    padding-top: 22px;
+    gap: 22px;
+  }
+
+  .blog-main__intro {
+    padding: 22px 20px;
+    border-radius: 22px;
+  }
+
+  .blog-main__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-empty {
+    padding: 28px 20px;
+    border-radius: 22px;
+  }
 }

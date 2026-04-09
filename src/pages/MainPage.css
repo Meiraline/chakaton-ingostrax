@@ -1,0 +1,18 @@
+.landing-page {
+  padding-bottom: 48px;
+}
+
+.landing-main {
+  display: grid;
+  gap: 72px;
+}
+
+@media (max-width: 760px) {
+  .landing-page {
+    padding-bottom: 32px;
+  }
+
+  .landing-main {
+    gap: 52px;
+  }
+}

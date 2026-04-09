@@ -1,0 +1,91 @@
+.landing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 0 12px;
+}
+
+.landing-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  flex-wrap: wrap;
+}
+
+.landing-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  text-decoration: none;
+}
+
+.landing-logo img {
+  width: 88px;
+  height: 88px;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.landing-nav a,
+.landing-header__actions a {
+  text-decoration: none;
+}
+
+.landing-nav a {
+  color: #1f5f8f;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.landing-header__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.landing-header__button {
+  min-width: 148px;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 #2d73a4;
+}
+
+.landing-header__button.button--secondary {
+  background: linear-gradient(180deg, #7fc2eb 0%, #63aad7 100%);
+  color: #ffffff;
+  border: 0;
+}
+
+.landing-header__button--login.button--primary {
+  background: linear-gradient(180deg, #4f69e8 0%, #3650cb 100%);
+  box-shadow: 0 4px 0 #243899;
+}
+
+@media (max-width: 760px) {
+  .landing-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .landing-header__brand,
+  .landing-header__actions,
+  .landing-nav {
+    justify-content: center;
+  }
+
+  .landing-header__actions {
+    flex-direction: column;
+  }
+
+  .landing-header__button {
+    width: 100%;
+  }
+}

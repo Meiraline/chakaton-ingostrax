@@ -1,21 +1,24 @@
 import React from 'react';
 import Layout from '../components/4_unity/Layout';
-import Header from '../components/3_organism/Header';
-import HeroSection from '../components/3_organism/HeroSection';
-import InfoSection from '../components/3_organism/InfoSection';
-import BlogPreview from '../components/3_organism/BlogPreview';
 import FooterSection from '../components/3_organism/FooterSection';
+import LandingHeader from '../components/3_organism/LandingHeader';
+import LandingHeroSection from '../components/3_organism/LandingHeroSection';
+import LandingAboutSection from '../components/3_organism/LandingAboutSection';
+import LandingBlogSection from '../components/3_organism/LandingBlogSection';
+import './MainPage.css';
 
 function MainPage() {
   return (
     <Layout>
-      <Header />
-      <main>
-        <HeroSection />
-        <InfoSection />
-        <BlogPreview />
-      </main>
-      <FooterSection />
+      <div className="landing-page">
+        <LandingHeader />
+        <main className="landing-main">
+          <LandingHeroSection />
+          <LandingAboutSection />
+          <LandingBlogSection />
+        </main>
+        <FooterSection />
+      </div>
     </Layout>
   );
 }
