@@ -5,7 +5,8 @@ import Header from '../components/3_organism/Header';
 import FooterSection from '../components/3_organism/FooterSection';
 import SectionTitle from '../components/1_atoms/SectionTitle';
 import { useAuth } from '../hooks/useAuth';
-import gameService from '../api/gameService';
+import { getBackground, getRound, submitRound } from '../api/game';
+import './GamePage.css';
 
 const statLabels = {
   health: 'Здоровье',
@@ -57,7 +58,7 @@ function GamePage() {
     setLoading(true);
 
     try {
-      const response = await gameService.getBackground(difficultyFromState, sessionGameID);
+      const response = await getBackground(difficultyFromState, sessionGameID);
       setBackground(response);
       setIsFinished(response?.status?.isFinish || false);
     } catch (err) {
@@ -76,7 +77,7 @@ function GamePage() {
     setRoundLoading(true);
 
     try {
-      const response = await gameService.getRound(sessionGameID);
+      const response = await getRound(sessionGameID);
       setRound(response);
       if (response?.status?.isFinish) {
         setIsFinished(true);
@@ -105,9 +106,9 @@ function GamePage() {
     setSendLoading(true);
 
     try {
-      const result = await gameService.submitRound(sessionGameID, playerAnswer.trim());
+      const result = await submitRound(sessionGameID, playerAnswer.trim());
       const currentRound = round;
-      const nextRound = await gameService.getRound(sessionGameID);
+      const nextRound = await getRound(sessionGameID);
 
       setLastResult({ answer: playerAnswer.trim(), result, previousRound: currentRound });
       setHistory((prev) => [
@@ -119,7 +120,7 @@ function GamePage() {
           status: nextRound?.status || currentRound?.status,
         },
       ]);
-      setHistoryIndex((prev) => (prev === -1 ? 0 : prev + 1));
+      setHistoryIndex(-1);
       setRound(nextRound);
       setPlayerAnswer('');
       if (nextRound?.status?.isFinish) {
@@ -142,6 +143,7 @@ function GamePage() {
     try {
       await loadRound();
       setLastResult(null);
+      setHistoryIndex(-1);
     } catch (err) {
       setError(err.message || 'Не удалось загрузить следующий раунд.');
     } finally {
@@ -170,6 +172,36 @@ function GamePage() {
 
   const currentStatus = round?.status || background?.status || {};
 
+  // Определяем текущее событие для отображения
+  const getCurrentEvent = () => {
+    if (currentHistory) {
+      return {
+        situation: currentHistory.question,
+        answer: currentHistory.answer,
+        consequence: currentHistory.consequence,
+      };
+    }
+
+    if (lastResult) {
+      return {
+        situation:
+          lastResult.previousRound?.event?.description ||
+          lastResult.previousRound?.event?.title ||
+          'Ситуация пока отсутствует.',
+        answer: lastResult.answer,
+        consequence: lastResult.result?.report || JSON.stringify(lastResult.result || {}, null, 2),
+      };
+    }
+
+    return {
+      situation: round?.event?.description || round?.event?.title || 'Ситуация пока отсутствует.',
+      answer: '',
+      consequence: '',
+    };
+  };
+
+  const currentEvent = getCurrentEvent();
+
   return (
     <Layout>
       <Header />
@@ -190,79 +222,91 @@ function GamePage() {
           {error && <div className="auth-error">{error}</div>}
 
           <div className="game-grid">
-            <div className="situation-panel">
-              <div className="situation-card">
-                <div className="situation-card__header">
-                  <h3>Ситуация</h3>
+            <div className="content-left">
+              {/* Блок событий */}
+              <div className="events-card">
+                <div className="events-card__header">
+                  <h3>События</h3>
                 </div>
-                <div className="situation-card__body">
-                  {roundLoading || loading ? (
+
+                {roundLoading || loading ? (
+                  <div className="events-card__loading">
                     <p>Загрузка...</p>
-                  ) : (
-                    <>
-                      <p>{round?.event?.description || round?.event?.title || 'Ситуация пока отсутствует.'}</p>
-                      {lastResult && (
-                        <div className="situation-answer">
-                          <p className="situation-answer__title">Ваш ответ:</p>
-                          <p>{lastResult.answer}</p>
-                          <p className="situation-answer__title">Последствия:</p>
-                          <p>{lastResult.consequence || 'Нет данных.'}</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="events-card__body">
+                      <div className="event-field">
+                        <label className="event-field__label">Ситуация</label>
+                        <div className="event-field__content">
+                          {currentEvent.situation}
                         </div>
-                      )}
-                    </>
-                  )}
-                </div>
-                <div className="situation-card__footer">
-                  <span>Возраст: {currentStatus.age ?? '-'}</span>
-                </div>
+                      </div>
+
+                      <div className="event-field">
+                        <label className="event-field__label">Ваш ответ</label>
+                        <div className="event-field__content">
+                          {currentEvent.answer || '—'}
+                        </div>
+                      </div>
+
+                      <div className="event-field">
+                        <label className="event-field__label">Последствия</label>
+                        <div className="event-field__content">
+                          {currentEvent.consequence || '—'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="events-card__footer">
+                      <button className="button button--secondary button--small" onClick={handleHistoryPrev} disabled={historyIndex <= 0}>
+                        ←
+                      </button>
+                      <span className="events-card__counter">{historyIndex + 1} / {Math.max(1, history.length)}</span>
+                      <button className="button button--secondary button--small" onClick={handleHistoryNext} disabled={historyIndex >= history.length - 1 || history.length === 0}>
+                        →
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
 
-              <div className="input-panel">
-                <label className="input-label">Решение ситуации</label>
+              {/* Блок ввода */}
+              <div className="input-card">
                 <textarea
                   value={playerAnswer}
                   onChange={(e) => setPlayerAnswer(e.target.value)}
-                  placeholder="Опишите, что делает персонаж"
-                  disabled={sendLoading || isFinished}
+                  placeholder="Опишите, что делает персонаж..."
+                  disabled={sendLoading || isFinished || loading}
+                  className="input-card__textarea"
                 />
-                <div className="input-actions">
+                <div className="input-card__actions">
                   {!lastResult ? (
-                    <button className="button button--primary" onClick={handleSend} disabled={sendLoading || !playerAnswer.trim() || isFinished}>
-                      {sendLoading ? 'Отправка...' : 'Отправить'}
+                    <button 
+                      className="button button--primary" 
+                      onClick={handleSend} 
+                      disabled={sendLoading || !playerAnswer.trim() || isFinished}
+                    >
+                      {sendLoading ? 'Отправка...' : 'Отправить ответ'}
                     </button>
                   ) : (
-                    <button className="button button--primary" onClick={handleNextRound} disabled={roundLoading || isFinished}>
-                      Следующий раунд
+                    <button 
+                      className="button button--primary" 
+                      onClick={handleNextRound} 
+                      disabled={roundLoading || isFinished}
+                    >
+                      {roundLoading ? 'Загрузка...' : 'Перейти к следующему ходу'}
                     </button>
                   )}
                 </div>
-
-                {history.length > 0 && (
-                  <div className="history-controls">
-                    <button className="button button--secondary" type="button" onClick={handleHistoryPrev} disabled={historyIndex <= 0}>
-                      ←
-                    </button>
-                    <span>{historyIndex + 1} / {history.length}</span>
-                    <button className="button button--secondary" type="button" onClick={handleHistoryNext} disabled={historyIndex >= history.length - 1}>
-                      →
-                    </button>
-                  </div>
-                )}
-
-                {currentHistory && (
-                  <div className="history-card">
-                    <p><strong>Ситуация:</strong> {currentHistory.question}</p>
-                    <p><strong>Ваш ответ:</strong> {currentHistory.answer}</p>
-                    <p><strong>Последствия:</strong> {currentHistory.consequence}</p>
-                  </div>
-                )}
               </div>
             </div>
 
-            <div className="character-panel">
+            {/* Профиль персонажа справа */}
+            <div className="content-right">
               <div className="character-card character-card--profile">
                 <div className="character-card__avatar">
-                  <img src="/icons/health.svg" alt="Персонаж" />
+                  <img src="/png/plaier_small.png" alt="Персонаж" />
                 </div>
                 <div className="character-card__content">
                   <h3>{location.state?.fullName || 'Персонаж'}</h3>

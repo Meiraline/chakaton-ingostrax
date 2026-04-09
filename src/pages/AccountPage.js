@@ -5,36 +5,42 @@ import Header from '../components/3_organism/Header';
 import FooterSection from '../components/3_organism/FooterSection';
 import CharacterCreationModal from '../components/3_organism/CharacterCreationModal';
 import { useAuth } from '../hooks/useAuth';
-import gameService from '../api/gameService';
 
 function AccountPage() {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [createError, setCreateError] = useState(null);
 
-  const storageKey = 'savedGameSessions';
+  const getStorageKey = React.useCallback(() => {
+    if (user?.id) {
+      return `savedGameSessions_${user.id}`;
+    }
+    if (user?.username) {
+      return `savedGameSessions_${user.username}`;
+    }
+    return 'savedGameSessions_guest';
+  }, [user?.id, user?.username]);
 
-  const getSavedSessions = () => {
+  const getSavedSessions = React.useCallback(() => {
     try {
-      const raw = localStorage.getItem(storageKey);
+      const raw = localStorage.getItem(getStorageKey());
       return raw ? JSON.parse(raw) : [];
     } catch {
       return [];
     }
-  };
+  }, [getStorageKey]);
 
-  const saveSessions = (items) => {
+  const saveSessions = React.useCallback((items) => {
     try {
-      localStorage.setItem(storageKey, JSON.stringify(items));
+      localStorage.setItem(getStorageKey(), JSON.stringify(items));
     } catch {
       // ignore
     }
-  };
+  }, [getStorageKey]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -61,7 +67,7 @@ function AccountPage() {
     };
 
     loadSessions();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.id, user?.username, getSavedSessions]);
 
   const openCreateModal = () => {
     setCreateError(null);
@@ -98,7 +104,7 @@ function AccountPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await gameService.getSessions();
+      const response = getSavedSessions();
       const sessionList = Array.isArray(response) ? response : [];
       setSessions(sessionList);
       saveSessions(sessionList);

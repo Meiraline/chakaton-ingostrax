@@ -1,5 +1,5 @@
 import React, { createContext, useState, useCallback, useEffect } from 'react';
-import apiClient from '../api/apiClient';
+import { loginUser, registerUser, getCurrentUser as apiGetCurrentUser } from '../api/auth';
 
 export const AuthContext = createContext();
 
@@ -9,27 +9,19 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    apiClient.setToken(token);
-  }, [token]);
-
   const login = useCallback(async (username, password) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await apiClient.post(
-        '/v1/auth/login',
-        { username, password },
-        true // isFormUrlencoded
-      );
+      const response = await loginUser({ username, password });
 
-      const newToken = response.access_token || response.token;
+      const newToken = response.access_token;
+      localStorage.setItem('authToken', newToken);
       setToken(newToken);
-      apiClient.setToken(newToken);
 
       // Load user profile, but don't fail if it errors
       try {
-        const userResponse = await apiClient.get('/v1/user/me');
+        const userResponse = await apiGetCurrentUser();
         setUser(userResponse);
       } catch (err) {
         console.warn('Could not load user profile:', err.message);
@@ -49,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      await apiClient.post('/v1/auth/register', {
+      await registerUser({
         name,
         surname,
         username,
@@ -71,7 +63,7 @@ export const AuthProvider = ({ children }) => {
 
     setLoading(true);
     try {
-      const userResponse = await apiClient.get('/v1/user/me');
+      const userResponse = await apiGetCurrentUser();
       setUser(userResponse);
       return userResponse;
     } catch (err) {
@@ -83,10 +75,10 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const logout = useCallback(() => {
+    localStorage.removeItem('authToken');
     setToken(null);
     setUser(null);
     setError(null);
-    apiClient.setToken(null);
   }, []);
 
   // Initialize user on mount or when token changes if needed

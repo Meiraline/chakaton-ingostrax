@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import gameService from '../../api/gameService';
+import { createSession, deleteSession, getBackground } from '../../api/game';
 import './CharacterCreationModal.css';
 
 function CharacterCreationModal({ visible, onClose, onCreate, onCreated, loading, error }) {
@@ -28,7 +28,7 @@ function CharacterCreationModal({ visible, onClose, onCreate, onCreated, loading
   const cleanupSession = useCallback(async () => {
     if (sessionId) {
       try {
-        await gameService.deleteSession(sessionId);
+        await deleteSession(sessionId);
       } catch (err) {
         // ignore cleanup errors
       }
@@ -48,20 +48,20 @@ function CharacterCreationModal({ visible, onClose, onCreate, onCreated, loading
     try {
       if (sessionId) {
         try {
-          await gameService.deleteSession(sessionId);
+          await deleteSession(sessionId);
         } catch (cleanupError) {
           console.warn('Не удалось удалить старую сессию', cleanupError);
         }
       }
 
-      const sessionResponse = await gameService.createSession(name.trim());
+      const sessionResponse = await createSession({ fullName: name.trim() });
       const newSessionId = sessionResponse?.id || sessionResponse?.sessionGameID || sessionResponse?.session_id;
       if (!newSessionId) {
         throw new Error('Не удалось создать персонажа');
       }
 
       setSessionId(newSessionId);
-      const backgroundResponse = await gameService.getBackground(difficulty, newSessionId);
+      const backgroundResponse = await getBackground(difficulty, newSessionId);
       setBackground(backgroundResponse?.background || 'Предыстория пока не готова.');
       setStatus(backgroundResponse?.status || null);
     } catch (err) {

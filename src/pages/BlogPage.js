@@ -4,14 +4,15 @@ import Header from '../components/3_organism/Header';
 import BlogHeader from '../components/3_organism/BlogHeader';
 import ArticleGrid from '../components/3_organism/ArticleGrid';
 import FooterSection from '../components/3_organism/FooterSection';
-import articlesData from '../data/articles';
+import { getArticles } from '../api/blog';
 import './BlogPage.css';
 
 function BlogPage() {
-  const [filteredArticles, setFilteredArticles] = useState(articlesData);
+  const [filteredArticles, setFilteredArticles] = useState(getArticles());
 
   const handleSearch = (searchTerm) => {
-    const filtered = articlesData.filter(article =>
+    const allArticles = getArticles();
+    const filtered = allArticles.filter(article =>
       article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
       article.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -20,10 +21,11 @@ function BlogPage() {
   };
 
   const handleFilter = (category) => {
+    const allArticles = getArticles();
     if (category === 'все') {
-      setFilteredArticles(articlesData);
+      setFilteredArticles(allArticles);
     } else {
-      const filtered = articlesData.filter(article => article.category === category);
+      const filtered = allArticles.filter(article => article.category === category);
       setFilteredArticles(filtered);
     }
   };

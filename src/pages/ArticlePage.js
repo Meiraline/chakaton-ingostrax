@@ -4,12 +4,12 @@ import Layout from '../components/4_unity/Layout';
 import Header from '../components/3_organism/Header';
 import FooterSection from '../components/3_organism/FooterSection';
 import Button from '../components/1_atoms/Button';
-import articlesData from '../data/articles';
+import { getArticleById } from '../api/blog';
 import './ArticlePage.css';
 
 function ArticlePage() {
   const { id } = useParams();
-  const article = articlesData.find(a => a.id === parseInt(id));
+  const article = getArticleById(id);
 
   if (!article) {
     return (
