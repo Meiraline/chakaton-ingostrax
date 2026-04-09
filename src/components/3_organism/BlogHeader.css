@@ -1,0 +1,87 @@
+.blog-header {
+  background: linear-gradient(135deg, #e7f1fb 0%, #d7e7f9 100%);
+  padding: 60px 0;
+  text-align: center;
+}
+
+.blog-header__content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.blog-header h1 {
+  font-size: 3rem;
+  margin: 0 0 16px;
+  color: #0f3255;
+}
+
+.blog-header p {
+  font-size: 1.2rem;
+  color: #2d486f;
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.blog-search {
+  display: flex;
+  gap: 12px;
+  max-width: 500px;
+  margin: 0 auto 24px;
+  align-items: center;
+}
+
+.blog-search__input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid rgba(31, 75, 122, 0.18);
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.blog-search__input:focus {
+  border-color: #1f4b7a;
+}
+
+.blog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.blog-filters__label {
+  font-weight: 600;
+  color: #0f3255;
+}
+
+.blog-filters__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.blog-filter-button {
+  padding: 8px 16px;
+  border: 2px solid rgba(31, 75, 122, 0.18);
+  background: #fff;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #1f4b7a;
+}
+
+.blog-filter-button:hover {
+  border-color: #1f4b7a;
+  background: #f8fbff;
+}
+
+.blog-filter-button.active {
+  background: #1f4b7a;
+  color: #fff;
+  border-color: #1f4b7a;
+}

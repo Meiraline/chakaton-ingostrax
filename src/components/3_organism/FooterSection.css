@@ -1,0 +1,32 @@
+.site-footer {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  padding: 40px 0 80px;
+  border-top: 1px solid rgba(34, 97, 162, 0.12);
+}
+
+.site-footer__brand p {
+  margin: 12px 0 0;
+  max-width: 520px;
+  color: #3b5879;
+  line-height: 1.8;
+}
+
+.site-footer__links {
+  display: grid;
+  gap: 24px;
+}
+
+.site-footer__links h4 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.site-footer__links a,
+.site-footer__links p {
+  display: block;
+  margin-bottom: 10px;
+  color: #245185;
+  text-decoration: none;
+}

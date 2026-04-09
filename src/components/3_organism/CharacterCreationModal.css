@@ -1,0 +1,145 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-panel {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-field span {
+  font-weight: 600;
+  color: #0f3255;
+}
+
+.modal-field input,
+.modal-field select {
+  padding: 12px 16px;
+  border: 2px solid rgba(31, 75, 122, 0.18);
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.modal-field input:focus,
+.modal-field select:focus {
+  border-color: #1f4b7a;
+}
+
+.creation-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.creation-preview__block {
+  background: #f8fbff;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.creation-preview__label {
+  display: block;
+  font-weight: 600;
+  color: #1f4b7a;
+  margin-bottom: 12px;
+}
+
+.creation-preview__text {
+  line-height: 1.6;
+  color: #2d486f;
+}
+
+.creation-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.creation-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.creation-metric span {
+  color: #4b6c93;
+}
+
+.creation-metric strong {
+  color: #1f4b7a;
+  font-weight: 700;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.modal-actions--full {
+  justify-content: space-between;
+}
+
+.auth-error {
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #c33;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,48 @@
+.hero-section {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 32px 0;
+}
+
+.hero-section__eyebrow {
+  display: inline-block;
+  color: #0f5b9a;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.hero-section h1 {
+  font-size: clamp(2.5rem, 3vw, 4rem);
+  line-height: 1.05;
+  margin: 0 0 24px;
+}
+
+.hero-section p {
+  max-width: 640px;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin: 0 0 28px;
+  color: #2d486f;
+}
+
+.hero-section__actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-section__visual img {
+  width: 100%;
+  border-radius: 28px;
+  box-shadow: 0 20px 50px rgba(17, 74, 132, 0.12);
+}
+
+@media (max-width: 720px) {
+  .hero-section {
+    gap: 20px;
+  }
+}

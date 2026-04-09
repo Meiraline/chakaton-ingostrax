@@ -1,0 +1,24 @@
+.team-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.team-item {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: #f6f9ff;
+  border: 1px solid rgba(31, 75, 122, 0.12);
+}
+
+.team-item strong {
+  display: block;
+  color: #1f4b7a;
+  margin-bottom: 6px;
+}
+
+.team-item span {
+  color: #4b6c93;
+}
