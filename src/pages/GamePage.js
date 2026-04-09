@@ -140,7 +140,7 @@ function GamePage() {
     }
   };
 
-  const handleNextRound = async () => {
+  const handleNextRound = useCallback(async () => {
     setError(null);
     if (history.length === 0) {
       return;
@@ -156,7 +156,7 @@ function GamePage() {
     } finally {
       setRoundLoading(false);
     }
-  };
+  }, [history.length, loadRound]);
 
   const handleLogout = () => {
     logout();
@@ -204,6 +204,62 @@ function GamePage() {
 
     setHistoryIndex(safeEventIndex + 1);
   };
+
+  const handleEnterAction = () => {
+    if (loading || roundLoading || sendLoading || isFinished) {
+      return;
+    }
+
+    if (lastResult) {
+      handleNextRound();
+      return;
+    }
+
+    if (playerAnswer.trim()) {
+      handleSend();
+    }
+  };
+
+  const handleTextareaKeyDown = (event) => {
+    if (event.key !== 'Enter' || event.shiftKey) {
+      return;
+    }
+
+    event.preventDefault();
+    handleEnterAction();
+  };
+
+  useEffect(() => {
+    const onWindowKeyDown = (event) => {
+      if (event.key !== 'Enter' || event.shiftKey || !lastResult) {
+        return;
+      }
+
+      const target = event.target;
+      const isTypingField =
+        target instanceof HTMLElement &&
+        (target.tagName === 'TEXTAREA' ||
+          target.tagName === 'INPUT' ||
+          target.isContentEditable);
+
+      if (isTypingField) {
+        return;
+      }
+
+      if (loading || roundLoading || sendLoading || isFinished) {
+        return;
+      }
+
+      event.preventDefault();
+      handleNextRound();
+    };
+
+    window.addEventListener('keydown', onWindowKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', onWindowKeyDown);
+    };
+  }, [lastResult, loading, roundLoading, sendLoading, isFinished, handleNextRound]);
 
   const currentEvent =
     safeEventIndex >= 0
@@ -317,6 +373,7 @@ function GamePage() {
                 <textarea
                   value={playerAnswer}
                   onChange={(e) => setPlayerAnswer(e.target.value)}
+                  onKeyDown={handleTextareaKeyDown}
                   placeholder="Опишите, что делает персонаж..."
                   disabled={sendLoading || isFinished || loading}
                   className="input-card__textarea"

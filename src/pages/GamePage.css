@@ -37,6 +37,7 @@
   grid-template-columns: 1fr 380px;
   gap: 24px;
   margin-bottom: 40px;
+  align-items: stretch;
 }
 
 .content-left {
@@ -87,24 +88,30 @@
 .events-card__media {
   position: relative;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  padding: 24px 18px 0;
+  padding: 24px;
   overflow: hidden;
   border-right: 2px solid var(--panel-border);
-  background:
-    radial-gradient(circle at 18% 24%, rgba(126, 198, 235, 0.22) 0 17%, transparent 18%),
-    radial-gradient(circle at 82% 18%, rgba(126, 198, 235, 0.18) 0 14%, transparent 15%),
-    radial-gradient(circle at 76% 78%, rgba(126, 198, 235, 0.14) 0 16%, transparent 17%),
-    linear-gradient(180deg, #fafdff 0%, #eef7ff 100%);
+  background: #ffffff;
+}
+
+.events-card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 42px 20px rgba(255, 255, 255, 0.95);
 }
 
 .events-card__image {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
-  max-height: 340px;
+  max-height: 320px;
   object-fit: contain;
-  object-position: center bottom;
+  object-position: center center;
 }
 
 .events-card__media-placeholder {
@@ -175,6 +182,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height: 100%;
 }
 
 .situation-card {
@@ -281,6 +289,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
 }
 
 .character-card--profile {
@@ -292,6 +301,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  flex: 1;
 }
 
 .character-card__avatar {
@@ -333,6 +343,7 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
+  margin-top: auto;
 }
 
 .stat-line {
@@ -433,7 +444,7 @@
     min-height: 240px;
     border-right: 0;
     border-bottom: 2px solid var(--panel-border);
-    padding: 20px 20px 0;
+    padding: 20px;
   }
 
   .events-card__image {
